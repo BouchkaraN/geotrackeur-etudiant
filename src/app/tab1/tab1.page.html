@@ -1,17 +1,47 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title>Traqueur Étudiant GPS</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Boutons géolocalisation -->
+  <ion-button expand="block" color="primary" (click)="getCurrentPosition()">
+    Position actuelle
+  </ion-button>
+  <ion-button expand="block" [color]="isTracking ? 'danger' : 'success'" (click)="toggleTracking()">
+    {{ isTracking ? '⏹ Arrêter le suivi' : '▶ Démarrer le suivi' }}
+  </ion-button>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- Affichage position actuelle -->
+  <ion-card *ngIf="currentPosition">
+    <ion-card-header>
+      <ion-card-title>Position actuelle</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Latitude :</strong> {{ currentPosition.coords.latitude | number:'1.6-6' }}</p>
+      <p><strong>Longitude :</strong> {{ currentPosition.coords.longitude | number:'1.6-6' }}</p>
+      <p><strong>Précision :</strong> {{ currentPosition.coords.accuracy | number:'1.0-0' }} m</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Historique des positions + bouton photo -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Historique des positions ({{ positions.length }})</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let pos of positions.slice(0,10); let i = index">
+      <ion-thumbnail slot="start">
+        <ion-img *ngIf="pos.photo" [src]="pos.photo"></ion-img>
+        <ion-icon *ngIf="!pos.photo" name="camera-outline" color="medium"></ion-icon>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>{{ i + 1 }}. {{ pos.timestamp }}</h3>
+        <p>{{ pos.coords.latitude | number:'1.6-6' }}, {{ pos.coords.longitude | number:'1.6-6' }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" (click)="takePhoto(i)">
+        📷 Photo
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
