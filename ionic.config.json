@@ -1,0 +1,7 @@
+{
+  "name": "geotrackeur-etudiant",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
