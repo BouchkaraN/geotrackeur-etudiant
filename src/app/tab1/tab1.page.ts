@@ -14,6 +14,23 @@ export class Tab1Page {
   watchId: string | null = null;
   isTracking = false;
 
+  constructor() {
+    this.loadPositions();
+  }
+
+  // Charger les positions depuis localStorage
+  loadPositions() {
+    const savedPositions = localStorage.getItem('geoPositions');
+    if (savedPositions) {
+      this.positions = JSON.parse(savedPositions);
+    }
+  }
+
+  // Sauvegarder les positions dans localStorage
+  savePositions() {
+    localStorage.setItem('geoPositions', JSON.stringify(this.positions));
+  }
+
   // 1) Position unique
   async getCurrentPosition() {
     try {
@@ -46,6 +63,7 @@ export class Tab1Page {
               timestamp: new Date().toLocaleString('fr-FR'),
               photo: null,
             });
+            this.savePositions(); // Sauvegarder
           },
           (error) => {
             let errorMsg = 'Erreur de géolocalisation';
@@ -82,6 +100,7 @@ export class Tab1Page {
           timestamp: new Date().toLocaleString('fr-FR'),
           photo: null,
         });
+        this.savePositions(); // Sauvegarder
       }
     } catch (error: any) {
       alert('Erreur GPS : ' + (error?.message || 'Inconnue'));
@@ -121,6 +140,7 @@ export class Tab1Page {
               timestamp: new Date().toLocaleString('fr-FR'),
               photo: null,
             });
+            this.savePositions(); // Sauvegarder
           }
         }
       ); // retourne un ID de watch
@@ -147,6 +167,7 @@ export class Tab1Page {
         source: CameraSource.Camera,
       }); // image.webPath pour <img>
       this.positions[index].photo = image.webPath;
+      this.savePositions(); // Sauvegarder
     } catch (error: any) {
       const errorMsg = error?.message || 'Inconnue';
       if (errorMsg.includes('not implemented') || errorMsg.includes('Not implemented') || errorMsg.includes('not available')) {

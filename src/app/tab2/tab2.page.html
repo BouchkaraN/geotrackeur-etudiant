@@ -1,17 +1,23 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Carte des Positions</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div id="map" style="height: 70vh; width: 100%;"></div>
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Positions enregistrées: {{ positions.length }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="block" (click)="refreshMap()">
+        🔄 Rafraîchir la carte
+      </ion-button>
+      <ion-button expand="block" color="danger" (click)="clearAllPositions()">
+        🗑️ Supprimer toutes les positions
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
